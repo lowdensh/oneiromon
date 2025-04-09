@@ -1,19 +1,20 @@
-from .models import Species, Style, Combination, PetInstance
+from .models import Species, Theme, Combination, PetInstance
 from django.contrib import admin
+from django.utils.html import mark_safe
 
 
 @admin.register(Species)
 class SpeciesAdmin(admin.ModelAdmin):
   # Main list of all objects
-  list_display = ("name", "date_discovered", "description", )
+  list_display = ("name", "count_pet_instances", "count_themes", "description", "date_discovered", )
   list_display_links = ("name", )
   search_fields = ("name", "description",)
 
 
-@admin.register(Style)
-class StyleAdmin(admin.ModelAdmin):
+@admin.register(Theme)
+class ThemeAdmin(admin.ModelAdmin):
   # Main list of all objects
-  list_display = ("name", "description", )
+  list_display = ("name", "count_pet_instances", "count_species", "description", )
   list_display_links = ("name", )
   search_fields = ("name", "description",)
 
@@ -21,20 +22,23 @@ class StyleAdmin(admin.ModelAdmin):
 @admin.register(PetInstance)
 class PetInstanceAdmin(admin.ModelAdmin):
   # Main list of all objects
-  list_display = ("name", "style", "species", "date_hatched", "owner", )
+  list_display = ("image_tag", "name", "theme", "species", "date_hatched", "owner", )
   list_display_links = ("name", )
-  list_filter = ("style", "species", "owner", )
+  list_filter = ("theme", "species", "owner", )
   ordering = ("owner", "name", )
   search_fields = ("name", )
 
-  # Specific object instance
-  readonly_fields = ["date_hatched", ]
+  # Specific instance
+  readonly_fields = ["date_hatched", "image_tag", ]
 
 
 @admin.register(Combination)
 class CombinationAdmin(admin.ModelAdmin):
   # Main list of all objects
-  list_display = ("__str__", "style", "species", )
-  list_display_links = ()
-  list_filter = ("style", "species", )
+  list_display = ("image_tag", "__str__", "theme", "species", )
+  list_display_links = ("image_tag", "__str__", )
+  list_filter = ("theme", "species", )
+
+  # Specific instance
+  readonly_fields = ["image_tag", ]
 
